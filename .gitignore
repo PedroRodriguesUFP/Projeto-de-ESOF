@@ -1,0 +1,22 @@
+# Compilação
+target/
+build/
+*.class
+*.jar
+*.war
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Segredos (nunca commitar)
+.env
+*.log
