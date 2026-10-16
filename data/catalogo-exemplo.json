@@ -1,0 +1,29 @@
+{
+  "_aviso": "DADOS DE EXEMPLO para desenvolvimento e testes. Substituir pelo catálogo oficial do MNSR.",
+  "salas": [
+    { "id": "S1", "nome": "Sala de Exemplo 1", "piso": 0, "estado": "ABERTA" },
+    { "id": "S2", "nome": "Sala de Exemplo 2", "piso": 0, "estado": "ABERTA" },
+    { "id": "S3", "nome": "Sala de Exemplo 3", "piso": 1, "estado": "ABERTA" },
+    { "id": "S4", "nome": "Galeria de Exemplo (piso -1)", "piso": -1, "estado": "ABERTA" },
+    { "id": "S5", "nome": "Sala em Restauro (exemplo)", "piso": 1, "estado": "FECHADA_RESTAURO" }
+  ],
+  "obras": [
+    { "id": "O01", "titulo": "Obra de Exemplo 01", "autor": "Autor A", "descricao": "Descrição de exemplo.", "minutosVisita": 4, "salaId": "S1" },
+    { "id": "O02", "titulo": "Obra de Exemplo 02", "autor": "Autor B", "descricao": "Descrição de exemplo.", "minutosVisita": 5, "salaId": "S1" },
+    { "id": "O03", "titulo": "Obra de Exemplo 03", "autor": "Autor C", "descricao": "Descrição de exemplo.", "minutosVisita": 6, "salaId": "S2" },
+    { "id": "O04", "titulo": "Obra de Exemplo 04", "autor": "Autor D", "descricao": "Descrição de exemplo.", "minutosVisita": 4, "salaId": "S2" },
+    { "id": "O05", "titulo": "Obra de Exemplo 05", "autor": "Autor E", "descricao": "Descrição de exemplo.", "minutosVisita": 5, "salaId": "S3" },
+    { "id": "O06", "titulo": "Obra de Exemplo 06", "autor": "Autor F", "descricao": "Descrição de exemplo.", "minutosVisita": 6, "salaId": "S3" },
+    { "id": "O07", "titulo": "Obra de Exemplo 07", "autor": "Autor G", "descricao": "Descrição de exemplo.", "minutosVisita": 5, "salaId": "S4" },
+    { "id": "O08", "titulo": "Obra de Exemplo 08", "autor": "Autor H", "descricao": "Descrição de exemplo.", "minutosVisita": 4, "salaId": "S4" },
+    { "id": "O09", "titulo": "Obra de Exemplo 09", "autor": "Autor I", "descricao": "Descrição de exemplo.", "minutosVisita": 6, "salaId": "S4" },
+    { "id": "O10", "titulo": "Obra em Restauro 10", "autor": "Autor J", "descricao": "Sala fechada.", "minutosVisita": 2, "salaId": "S5" },
+    { "id": "O11", "titulo": "Obra em Restauro 11", "autor": "Autor K", "descricao": "Sala fechada.", "minutosVisita": 2, "salaId": "S5" }
+  ],
+  "pistas": [
+    { "codigo": "QR-001", "enigma": "Enigma de exemplo 1", "obraId": "O01" },
+    { "codigo": "QR-002", "enigma": "Enigma de exemplo 2", "obraId": "O04" },
+    { "codigo": "QR-003", "enigma": "Enigma de exemplo 3", "obraId": "O07" }
+  ],
+  "premio": { "descricao": "Prémio de exemplo: desconto na loja do museu" }
+}
