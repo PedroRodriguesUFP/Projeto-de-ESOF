@@ -1,6 +1,6 @@
 # App MNSR Digital
 
-**Equipa XX:** Pedro Rodrigues, Diogo Borges, Diogo Vicente, Tiago Vaz
+**Equipa 01:** Pedro Rodrigues, Diogo Borges, Diogo Vicente, Tiago Vaz
 
 ## Problema
 O Museu Nacional Soares dos Reis recebe cerca de 85.000 visitantes/ano, 62% seniores

@@ -1,4 +1,4 @@
-﻿# Equipa
+# Equipa
 
 | Nome | Nº estudante | Função |
 | --- | --- | --- |
