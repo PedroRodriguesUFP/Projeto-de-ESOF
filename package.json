@@ -6,8 +6,11 @@
   "private": true,
   "engines": { "node": ">=20" },
   "scripts": {
+    "lint": "node scripts/static-analysis.js",
     "test": "node --test",
-    "demo": "node src/demo.js"
+    "test:ci": "node --test --experimental-test-coverage",
+    "demo": "LOG_LEVEL=INFO node src/demo.js",
+    "check": "npm run lint && npm test"
   },
   "license": "MIT"
 }

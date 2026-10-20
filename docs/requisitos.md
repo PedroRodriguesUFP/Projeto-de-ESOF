@@ -4,6 +4,16 @@
 > quando o M2 foi preparado. Esta lista é uma **reconstrução** a partir do problema, da visão do produto e do
 > README. **Antes de entregar, alinhar os IDs e o texto com as issues/backlog reais do M1.**
 
+
+| Stakeholder | Papel / Interesse no Sistema | Impacto Principal |
+| --- | --- | --- |
+| **Visitante Jovem / Estudante** | Procura uma visita interativa, gamificada e rápida (QR Codes, caça ao tesouro). | Utilizador direto (`US01`, `US02`, `US04`) |
+| **Visitante / Turista com pouco tempo** | Quer otimizar uma visita curta (ex.: 30 min) vendo as obras essenciais sem se perder. | Utilizador direto (`US01`, `US03`, `US05`) |
+| **Gestor / Curador do Museu (MNSR)** | Gere o estado das salas (restauro/eventos), conteúdos curados e analisa afluência. | Utilizador interno (`US06`, `RNF04`) |
+| **Equipa Técnica / TI do Museu** | Garante operação segura, conformidade com RGPD e funcionamento sem Wi-Fi no piso -1. | Operação e manutenção (`RNF01`–`RNF05`) |
+
+
+
 ## Requisitos funcionais (user stories)
 
 | ID | User story | Prioridade |

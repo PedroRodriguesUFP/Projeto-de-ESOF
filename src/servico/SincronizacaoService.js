@@ -1,10 +1,13 @@
+import { loggerPadrao } from '../infra/Logger.js';
+
 export class SincronizacaoService {
   /**
-   * @param {{ progressoRepository, remoto: { enviarProgresso: (dados) => Promise<void> } }} deps
+   * @param {{ progressoRepository, remoto: { enviarProgresso: (dados) => Promise<void> }, logger? }} deps
    */
-  constructor({ progressoRepository, remoto }) {
+  constructor({ progressoRepository, remoto, logger = loggerPadrao }) {
     this.progressos = progressoRepository;
     this.remoto = remoto;
+    this.logger = logger;
   }
 
   /** Envia o progresso pendente. Se a rede falhar, mantém-no pendente e não lança erro. */
@@ -18,8 +21,13 @@ export class SincronizacaoService {
         progresso.marcarSincronizado();
         await this.progressos.guardar(progresso);
         enviados++;
-      } catch {
+        this.logger.info('PROGRESSO_SINCRONIZADO', { idAnonimo: progresso.idAnonimo });
+      } catch (erro) {
         falhados++; // sem rede: tenta outra vez mais tarde
+        this.logger.warn('SINCRONIZACAO_ADIADA_OFFLINE', {
+          idAnonimo: progresso.idAnonimo,
+          motivo: erro.message,
+        });
       }
     }
     return { enviados, falhados };

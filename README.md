@@ -12,7 +12,20 @@ Aplicação móvel/PWA com roteiros por tempo, caça ao tesouro com QR Codes,
 assistente de IA e funcionamento offline.
 
 ## Instalação
-(a preencher quando houver código)
+
+Pré-requisitos: **Node.js ≥ 20** (sem dependências externas).
+
+  1. Executar análise estática (sintaxe, arquitetura ADR-0002 e segredos RNF05)
+npm run lint
+
+  2. Executar os 20 testes automatizados (unitários e de integração)
+npm test
+
+  3. Executar testes com relatório de cobertura (CI)
+npm run test:ci
+
+  4. Executar demonstração do núcleo (roteiro 30 min + caça ao tesouro offline + sincronização)
+npm run demo
 
 ## Visão do Produto
 
