@@ -1,0 +1,16 @@
+{
+  "name": "mnsr-digital",
+  "version": "0.3.0",
+  "description": "App MNSR Digital - núcleo de domínio e serviços (M3)",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "lint": "node scripts/static-analysis.js",
+    "test": "node --test",
+    "test:ci": "node --test --experimental-test-coverage",
+    "demo": "LOG_LEVEL=INFO node src/demo.js",
+    "check": "npm run lint && npm test"
+  },
+  "license": "MIT"
+}
