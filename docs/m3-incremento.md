@@ -2,81 +2,93 @@
 
 **Critério da FUC (semana 6):** incremento executável + testes automatizados mínimos + histórico Git inteligível.
 
-## 1. O que o incremento entrega
+> **Nota de atualização (21/10/2026):** este documento mantém o registo histórico da entrega M3 (17 testes). O M4 acrescentou análise estática, CI, logging e mais 3 testes, elevando o total para **20 testes**. Ver [`m4-ci-qualidade.md`](m4-ci-qualidade.md). Os IDs das user stories abaixo seguem as [issues originais do backlog](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues), não a numeração provisória usada em versões antigas da documentação.
 
-Núcleo de domínio e serviços da app, **sem interface gráfica** (a PWA e o IndexedDB ficam para M4+):
+## 1. O que o incremento M3 entrega
 
-| Requisito | Estado no M3 | Onde |
+O M3 entrega o núcleo de domínio e serviços da aplicação **sem interface gráfica**. A PWA completa, o IndexedDB e o Service Worker não estão incluídos neste incremento.
+
+| Requisito do backlog | Estado no M3 | Evidência |
 | --- | --- | --- |
-| US01 Roteiro por tempo | Implementado | `src/servico/RoteiroService.js` |
-| US02 Caça ao tesouro (QR) | Implementado | `src/servico/CacaTesouroService.js`, `src/dominio/ProgressoCaca.js` |
-| US04 Offline | Lógica implementada (guardar localmente + sincronizar depois); falta IndexedDB e Service Worker | `src/servico/SincronizacaoService.js` |
-| US05 RGPD | Parcial: progresso só com ID anónimo (testado); falta consentimento/política | `src/dominio/ProgressoCaca.js` |
-| US06 Gestão de salas | Parcial: salas fechadas nunca entram em roteiros; falta o ecrã/API do gestor | `src/dados/ObraRepositoryMemoria.js` |
-| US03 Assistente IA | **Não iniciado** | — |
+| **US-01 — Gerar roteiro por tempo** | Lógica implementada; sem ecrã para o visitante | `src/servico/RoteiroService.js` |
+| **US-02 — Consultar roteiro offline** | Parcial: lógica de sincronização; sem armazenamento persistente em IndexedDB nem Service Worker | `src/servico/SincronizacaoService.js` |
+| **US-03 — Ver ficha da obra O Desterro** | Não demonstrada como ficha de interface completa | `src/dominio/Obra.js`; dados de exemplo em `data/catalogo-exemplo.json` |
+| **US-04 — Ler QR Code e desbloquear pista** | Lógica de validação e registo implementada; falta a leitura por câmara/UI | `src/servico/CacaTesouroService.js`, `src/dominio/ProgressoCaca.js` |
+| **US-05 — Receber recompensa ao concluir a caça** | Lógica de atribuição implementada; falta ecrã de recompensa | `src/servico/CacaTesouroService.js` |
+| **US-06 — Perguntar ao assistente sobre uma obra** | Não iniciado | — |
+
+**Requisitos transversais:** o progresso usa um identificador anónimo (RNF03, parcialmente coberto); o roteiro exclui obras/salas indisponíveis (regra de negócio representada nos testes). Isto **não significa** que exista ainda uma interface/API de gestão de salas ou uma política de consentimento completa.
 
 ## 2. Como executar
 
-Requer Node.js ≥ 20 e **não tem dependências** (usa o *test runner* do próprio Node).
+Requer **Node.js ≥ 20**. O projeto usa o *test runner* incluído no Node e não exige dependências externas.
 
 ```bash
-npm test        # corre os 17 testes automatizados
-npm run demo    # demonstração: roteiro de 30 min + caça ao tesouro offline + sincronização
+npm run lint       # disponível desde o M4: análise estática
+npm test           # estado atual: 20 testes automatizados (17 no M3)
+npm run test:ci    # disponível desde o M4: testes com relatório de cobertura
+npm run demo       # demonstra o núcleo de roteiros, caça e sincronização
 ```
 
-## 3. Testes (17) e rastreabilidade
+> No M3, os comandos principais eram `npm test` (17 testes) e `npm run demo`. Os comandos de qualidade foram acrescentados depois.
 
-| Ficheiro | Tipo | Requisitos | Nº |
-| --- | --- | --- | --- |
-| `tests/RoteiroService.test.js` | Unitário | US01, US06 | 8 |
-| `tests/CacaTesouroService.test.js` | Unitário | US02, US05 | 6 |
-| `tests/Sincronizacao.integracao.test.js` | Integração | US04, RNF01 | 3 |
+## 3. Testes e rastreabilidade
 
-Casos importantes: roteiro de 30 min com 5–7 obras e ≤ 30 min; obras de salas em restauro nunca selecionadas; QR inválido; QR repetido não conta duas vezes; prémio ao completar; offline → pendente → sincroniza; resposta local < 1 s; dados do progresso só anónimos.
+### 3.1 Testes incluídos no M3 (17)
 
-## 4. Desvios face ao M2 (a refletir na documentação)
+| Ficheiro | Tipo | Funcionalidade / requisito | Nº |
+| --- | --- | --- | ---: |
+| `tests/RoteiroService.test.js` | Unitário | US-01; exclusão de obras indisponíveis | 8 |
+| `tests/CacaTesouroService.test.js` | Unitário | US-04, US-05; identificador anónimo (RNF03) | 6 |
+| `tests/Sincronizacao.integracao.test.js` | Integração | US-02; lógica de sincronização, RNF01 | 3 |
+| **Total M3** | | | **17** |
 
-- `ObraRepository` ganhou `totalPistas()` e `obterPremio()` (necessários para a caça ao tesouro). **Atualizar o diagrama de classes de serviço em `arquitetura.md`.**
-- `GestaoSalasService` ainda não existe: o filtro de salas fechadas está no repositório. Decidir no M4 se se cria o serviço.
-- Linguagem: JavaScript (ES modules) por coerência com a PWA do ADR-0001. O `.gitignore` do repositório é de Java: **confirmar a stack com a equipa** (ver secção 6).
-- Repositórios em memória; os de IndexedDB e API REST ficam para M4+.
+### 3.2 Testes acrescentados no M4
 
-## 5. Limitações conhecidas
+| Ficheiro | Tipo | Objetivo | Nº |
+| --- | --- | --- | ---: |
+| `tests/Logger.test.js` | Unitário | Logging e proteção de dados sensíveis | 3 |
+| **Total acumulado até M4** | | | **20** |
 
-- O algoritmo escolhe sempre as obras mais curtas primeiro (resultado determinístico, mas pouco variado; melhorar com preferências/temas).
-- Dados do catálogo são **de exemplo** (`data/catalogo-exemplo.json`); falta o catálogo real do MNSR.
-- Ler um QR de uma sala fechada continua a ser aceite (decisão por tomar).
-- Sem verificação de cobertura de testes nem análise estática (M4).
+Casos abordados no núcleo: roteiro de 30 minutos com 5 a 7 obras e duração dentro do limite; exclusão de obras indisponíveis; rejeição de QR inválido e repetido; recompensa quando a caça termina; progresso pendente para sincronização; medição de resposta local; utilização de ID anónimo. **Não equivalem a testes da PWA offline completa**, que ainda requer IndexedDB e Service Worker.
 
-## 6. Plano Git (histórico inteligível)
+## 4. Desvios e evolução face ao desenho do M2
 
-Antes de começar: fazer *merge* do M2 (ver correções ao `README.md` e `EQUIPA.md`). Depois:
+- O `ObraRepository` passou a ter operações necessárias à caça ao tesouro, incluindo `totalPistas()` e `obterPremio()`. Confirmar que o diagrama das interfaces em `arquitetura.md` reflete as assinaturas efetivamente implementadas.
+- A gestão de salas indisponíveis é tratada no núcleo de seleção de obras; `GestaoSalasService` e a interface de gestão continuam previstos, mas não implementados.
+- A linguagem escolhida foi **JavaScript com ES modules**, coerente com a evolução prevista para uma PWA.
+- A persistência atual do incremento usa repositórios em memória. Persistência em IndexedDB, Service Worker e API REST continuam por implementar.
+- As referências antigas `US01`–`US06` foram alinhadas nesta revisão com as issues do backlog. Isto altera as **etiquetas documentais**, não as funcionalidades implementadas.
+
+## 5. Limitações ainda existentes
+
+- O algoritmo de roteiros privilegia as obras de visita mais curta; falta explorar preferências e percursos temáticos.
+- O catálogo em `data/catalogo-exemplo.json` é ilustrativo; falta validação e integração de dados reais do museu.
+- É necessário definir a regra para QR Codes em salas temporariamente fechadas.
+- Não existe PWA completa nem demonstração real de persistência offline após reiniciar a aplicação.
+- Falta o assistente IA/RAG da US-06 e faltam interfaces de utilização para as outras histórias.
+- O M4 **acrescentou** a análise estática, CI, logging e cobertura; estas já não são limitações do estado atual, embora não fizessem parte do M3 original.
+
+## 6. Registo de trabalho e histórico Git
+
+O plano original previa commits pequenos por componente (domínio, acesso a dados, serviços, testes e demonstração), em branch de funcionalidade, seguidos de Pull Request e revisão. A equipa deve usar o histórico real do GitHub como evidência — a lista planeada de commits não substitui a verificação dos commits e revisões que efetivamente ocorreram.
+
+Para consultar o histórico:
 
 ```bash
-git checkout master && git pull
-git checkout -b feature/m3-nucleo-roteiros-caca
+git log --oneline --decorate --all
 ```
 
-Commits pequenos, um por ideia (convenção *Conventional Commits*):
+Recomenda-se relacionar os próximos Pull Requests com as issues correspondentes, distinguir funcionalidades parciais de completas e pedir revisão de um colega antes de integrar em `master`.
 
-1. `chore: adiciona package.json e ignora node_modules`
-2. `feat(dominio): adiciona Obra, Sala, Roteiro, ProgressoCaca e erros`
-3. `feat(dados): adiciona repositórios em memória e catálogo de exemplo`
-4. `feat(servico): adiciona RoteiroService (US01, US06)`
-5. `test(servico): adiciona testes unitários do RoteiroService`
-6. `feat(servico): adiciona CacaTesouroService (US02, US05)`
-7. `test(servico): adiciona testes unitários da caça ao tesouro`
-8. `feat(servico): adiciona SincronizacaoService e teste de integração (US04)`
-9. `feat: adiciona demo executável`
-10. `docs: adiciona m3-incremento.md e atualiza AI_LOG e rastreabilidade`
+## 7. Checklist de validação atual
 
-Depois: `git push -u origin feature/m3-nucleo-roteiros-caca`, abrir PR a referenciar as issues (`Closes #n`) e pedir revisão a um colega antes do *merge*.
+- [ ] Executar `npm test` e confirmar os **20 testes** no código atual.
+- [ ] Executar `npm run lint` e `npm run test:ci`.
+- [ ] Executar `npm run demo` e conseguir explicar os resultados.
+- [ ] Validar que `docs/requisitos.md`, `docs/rastreabilidade.md` e `docs/arquitetura.md` usam os IDs das issues `US-01` a `US-06`.
+- [ ] Confirmar revisão por pares nos Pull Requests relevantes.
+- [ ] Atualizar o `AI_LOG.md` com as alterações documentais feitas e as verificações humanas efetivas.
+- [ ] Assinalar nas issues o que está implementado, parcial ou pendente, sem fechar histórias ainda incompletas.
 
-## 7. Checklist de entrega do M3
-
-- [ ] `npm test` passa na tua máquina (17/17) e `npm run demo` corre
-- [ ] Sabes explicar cada ficheiro e alterar uma regra (ex.: mudar MAX_OBRAS e ver que teste falha)
-- [ ] PR com revisão de outro membro; sem *commits* diretos no `master`
-- [ ] AI_LOG com nova linha M3.1 preenchida com o que fizeste de facto
-- [ ] README atualizado com secção "Instalação" (`npm test`, `npm run demo`)
-- [ ] Issues do M3 criadas e fechadas pelas PRs
+**Nota:** esta checklist serve para orientar a validação pela equipa; as caixas não foram marcadas como concluídas automaticamente.
