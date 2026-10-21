@@ -1,63 +1,69 @@
 # App MNSR Digital
 
-**Equipa 01:** Pedro Rodrigues, Diogo Borges, Diogo Vicente, Tiago Vaz
+**Equipa 01:** Pedro Rodrigues, Diogo Borges, Diogo Vicente, Tiago Vaz.
 
 ## Problema
-O Museu Nacional Soares dos Reis recebe cerca de 85.000 visitantes/ano, 62% seniores
-e só 15% jovens, com permanência média de 42 minutos. Precisa de atrair e reter
-públicos mais novos.
+O Museu Nacional Soares dos Reis pretende proporcionar experiências de visita mais dinâmicas, sobretudo a jovens, famílias e turistas com pouco tempo. Os valores de público anteriormente referidos neste README devem ser confirmados com uma fonte antes de serem usados como estatísticas oficiais.
 
-## Solução
-Aplicação móvel/PWA com roteiros por tempo, caça ao tesouro com QR Codes,
-assistente de IA e funcionamento offline.
+## Visão do produto
+- **Para** jovens, famílias e turistas culturais que visitam o Porto;
+- **que** procuram visitas flexíveis e interativas;
+- **MNSR Digital** é uma aplicação móvel/PWA proposta;
+- **que** prevê roteiros por duração, consulta offline, fichas de obras, caça ao tesouro por QR e assistente IA fundamentado no acervo;
+- **ao contrário de** materiais de visita estáticos, procura adaptar a experiência ao tempo e interesses do visitante.
 
-## Instalação
+## Estado atual do repositório (21-10-2026)
 
-Pré-requisitos: **Node.js ≥ 20** (sem dependências externas).
+Existe um **núcleo JavaScript executável sem interface gráfica**: modelos de domínio, `RoteiroService`, `CacaTesouroService`, `SincronizacaoService`, repositórios em memória, testes automatizados, análise estática, `Logger` e pipeline CI. A interface PWA, IndexedDB, Service Worker, API REST e assistente IA são componentes planeados; não estão demonstrados como funcionalidades completas do repositório.
 
-  1. Executar análise estática (sintaxe, arquitetura ADR-0002 e segredos RNF05)
-npm run lint
+## Instalação e validação
 
-  2. Executar os 20 testes automatizados (unitários e de integração)
-npm test
+Requisito: **Node.js ≥ 20**. O núcleo utiliza o test runner nativo do Node.js.
 
-  3. Executar testes com relatório de cobertura (CI)
-npm run test:ci
+```bash
+npm run lint     # análise estática
+npm test         # testes automatizados
+npm run test:ci  # testes em modo CI / cobertura
+npm run demo     # roteiro de exemplo, caça e sincronização (sem UI)
+```
 
-  4. Executar demonstração do núcleo (roteiro 30 min + caça ao tesouro offline + sincronização)
-npm run demo
+O README do repositório assinala **20 testes** após o M4. Deve confirmar-se a execução local e o resultado da CI antes de cada entrega.
 
-## Visão do Produto
+## Requisitos do backlog (IDs oficiais)
 
-- **PARA** os jovens, famílias e turistas culturais que visitam o Porto,
-- **QUE** procuram uma experiência museológica dinâmica, personalizada e interativa,
-- **A APP MNSR DIGITAL** é uma aplicação móvel inteligente e gamificada,
-- **QUE** oferece roteiros por tempo disponível, caça ao tesouro por QR Code e um guia conversacional de IA sobre as obras,
-- **AO CONTRÁRIO DOS** guias áudio estáticos e brochuras em papel,
-- **O NOSSO PRODUTO** aumenta o envolvimento do visitante, promove o regresso do público local e ajuda a gerir o fluxo nas salas.
+| User story | Funcionalidade | Estado do núcleo |
+| --- | --- | --- |
+| [US-01](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/5) | Gerar roteiro por duração | Lógica implementada; sem UI |
+| [US-02](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/6) | Consultar roteiro offline | Parcial; sem cache persistente/PWA |
+| [US-03](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/7) | Consultar ficha de O Desterro | Por implementar como ecrã |
+| [US-04](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/8) | Ler QR e desbloquear pista | Lógica implementada; sem leitor UI |
+| [US-05](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/9) | Receber prémio ao concluir caça | Lógica implementada; sem ecrã |
+| [US-06](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/10) | Perguntar ao assistente IA | Por implementar |
+
+A matriz completa de testes e limitações encontra-se em [`docs/rastreabilidade.md`](docs/rastreabilidade.md).
 
 ## Documentação
 
-| Documento | Conteúdo | Marco |
-| --- | --- | --- |
-| [Requisitos](docs/requisitos.md) | User stories e RNF prioritários | M1 |
-| [Arquitetura e UML](docs/arquitetura.md) | Casos de uso, classes, camadas, sequência (Mermaid) | M2 |
-| [Rastreabilidade](docs/rastreabilidade.md) | Requisito → desenho → teste previsto | M2 |
-| [ADR-0001](docs/adr/0001-pwa-offline-first.md) | PWA offline-first | M2 |
-| [ADR-0002](docs/adr/0002-arquitetura-em-camadas-e-api-rest.md) | Arquitetura em camadas e API REST | M2 |
-| [AI Log](docs/AI_LOG.md) | Registo de uso de IA generativa | M0–M6 |
-| [Equipa](docs/EQUIPA.md) | Membros e funções | M0 |
+| Documento | Conteúdo |
+| --- | --- |
+| [Requisitos](docs/requisitos.md) | Stakeholders, 6 user stories e requisitos não funcionais |
+| [Arquitetura e UML](docs/arquitetura.md) | Diagramas, arquitetura proposta e distinção entre existente/planeado |
+| [Rastreabilidade](docs/rastreabilidade.md) | Issues → componentes → testes → lacunas |
+| [ADR-0001](docs/adr/0001-pwa-offline-first.md) | Justificação da escolha PWA offline-first |
+| [ADR-0002](docs/adr/0002-arquitetura-em-camadas-e-api-rest.md) | Arquitetura em camadas e API REST prevista |
+| [M3](docs/m3-incremento.md) | Histórico do incremento executável; numeração antiga documentada na rastreabilidade |
+| [M4](docs/m4-ci-qualidade.md) | CI, análise estática e logging |
+| [AI Log](docs/AI_LOG.md) | Registo de uso de IA (M0–M6) |
+| [Equipa](docs/EQUIPA.md) | Elementos e funções |
 
-## Arquitetura (resumo)
-
-Três camadas (Apresentação → Serviço → Acesso a Dados) com dependências apenas de cima para baixo.
-A PWA guarda o catálogo e o progresso localmente (IndexedDB) para funcionar nas galerias do piso -1 sem rede,
-e sincroniza com a API REST quando a rede regressa. Detalhes e diagramas em [`docs/arquitetura.md`](docs/arquitetura.md).
+## Arquitetura resumida
 
 ```mermaid
 flowchart TB
-    UI["Apresentação (PWA)"] --> SV["Serviços: Roteiro, Caça ao Tesouro, Assistente, Sincronização"]
-    SV --> DA["Acesso a Dados (interfaces)"]
-    DA --> LOC["IndexedDB (offline)"]
-    DA --> API[("API REST")]
+    UI["Apresentação PWA (prevista)"] --> SV["Serviços (núcleo parcial existente)"]
+    SV --> MEM["Repositórios em memória (existentes)"]
+    MEM -.-> LOC["IndexedDB offline (previsto)"]
+    MEM -.-> API["API REST (prevista)"]
 ```
+
+**Nota de âmbito:** a gestão de salas e a afluência agregada apareciam em documentação antiga como `US06`. Não são a `US-06` original do backlog, que corresponde ao assistente IA. O filtro de obras indisponíveis continua a ser um critério da `US-01`.

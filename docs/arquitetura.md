@@ -1,333 +1,243 @@
 # Arquitetura e modelação UML — App MNSR Digital (M2)
 
-Os diagramas estão em **Mermaid** e renderizam nativamente no GitHub.
-Rastreabilidade com requisitos: ver [`rastreabilidade.md`](rastreabilidade.md). Decisões: ver [`adr/`](adr/).
+Documento atualizado para usar os identificadores das [issues originais](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues): **US-01** roteiro, **US-02** roteiro offline, **US-03** ficha da obra, **US-04** leitura QR, **US-05** recompensa e **US-06** assistente IA. A arquitetura PWA/REST/IndexedDB é **proposta**; o repositório contém sobretudo lógica de domínio, serviços e repositórios em memória. Ver [requisitos](requisitos.md), [rastreabilidade](rastreabilidade.md) e [decisões ADR](adr/).
 
 ## 1. Modelo de casos de uso
 
-O Mermaid não tem diagrama de casos de uso nativo; usa-se um fluxograma com a mesma semântica (atores à esquerda, casos de uso em elipses).
+O Mermaid não tem um diagrama UML de casos de uso nativo; este fluxograma representa atores e funcionalidades, sem pretender substituir integralmente a notação UML.
 
 ```mermaid
 flowchart LR
     V([Visitante])
-    G([Gestor do museu])
+    C([Criança / família])
     IA([Serviço de IA externo])
-
-    subgraph SIS["Sistema: App MNSR Digital"]
-        UC1(("Gerar roteiro por tempo - US01"))
-        UC2(("Ler QR Code de pista - US02"))
-        UC3(("Consultar progresso e prémio - US02"))
-        UC4(("Perguntar ao assistente - US03"))
-        UC5(("Usar a app offline - US04"))
-        UC6(("Consultar estado de salas - US06"))
-        UC7(("Atualizar estado de sala ou obra - US06"))
-        UC8(("Ver afluência agregada - US06"))
+    subgraph APP["Sistema MNSR Digital — funcionalidades previstas"]
+        UC1(("Gerar roteiro por tempo — US-01"))
+        UC2(("Consultar roteiro offline — US-02"))
+        UC3(("Consultar ficha de O Desterro — US-03"))
+        UC4(("Ler QR e desbloquear pista — US-04"))
+        UC5(("Receber prémio — US-05"))
+        UC6(("Perguntar sobre uma obra — US-06"))
     end
-
     V --> UC1
     V --> UC2
     V --> UC3
-    V --> UC4
-    V --> UC5
-    G --> UC6
-    G --> UC7
-    G --> UC8
-    UC4 -.->|"usa"| IA
-    UC1 -.->|"inclui"| UC6
-    UC2 -.->|"estende com"| UC5
+    V --> UC6
+    C --> UC4
+    C --> UC5
+    UC6 -.-> IA
 ```
 
-## 2. Diagrama de classes — modelo de domínio
+O gestor/curador do museu é um stakeholder importante para conteúdos e disponibilidade das obras, mas a gestão de salas e estatísticas de afluência são **ideias futuras**, não a `US-06` do backlog.
+
+## 2. Diagrama de classes — modelo de domínio (visão conceptual)
+
+Inclui entidades previstas no desenho; nem todas correspondem a classes já implementadas.
 
 ```mermaid
 classDiagram
-    direction LR
-
     class Sala {
-        -String id
-        -String nome
-        -int piso
-        -EstadoSala estado
+        +id
+        +nome
+        +estado
         +estaDisponivel() boolean
     }
     class Obra {
-        -String id
-        -String titulo
-        -String autor
-        -String descricao
-        -int minutosVisitaEstimados
+        +id
+        +titulo
+        +autor
+        +descricao
+        +minutosVisitaEstimados
         +estaDisponivel() boolean
     }
     class Roteiro {
-        -String id
-        -int minutosDisponiveis
+        +id
+        +minutosDisponiveis
         +duracaoTotal() int
-        +adicionarParagem(obra, minutos)
-    }
-    class ParagemRoteiro {
-        -int ordem
-        -int minutos
-    }
-    class CacaAoTesouro {
-        -String id
-        -String titulo
-        +totalPistas() int
     }
     class PistaQR {
-        -String codigo
-        -String enigma
+        +codigo
+        +enigma
     }
     class ProgressoCaca {
-        -int pistasConcluidas
-        -boolean sincronizado
+        +pistasConcluidas
+        +sincronizado
         +registarPista(codigo) boolean
         +estaCompleto() boolean
     }
     class Premio {
-        -String descricao
+        +descricao
     }
     class Visitante {
-        -String idAnonimo
-        -String idioma
+        +idAnonimo
     }
     class RespostaAssistente {
-        -String texto
-        -boolean geradaPorIA
-        -List~String~ idsObrasCitadas
+        +texto
+        +geradaPorIA
+        +idsObrasCitadas
     }
-    class EstadoSala {
-        <<enumeration>>
-        ABERTA
-        FECHADA_RESTAURO
-        FECHADA_EVENTO
-    }
-
-    Sala "1" --> "*" Obra : contem
-    Sala --> EstadoSala
-    Roteiro "1" *-- "1..*" ParagemRoteiro : composto por
-    ParagemRoteiro "*" --> "1" Obra : refere
-    CacaAoTesouro "1" *-- "*" PistaQR : composta por
-    PistaQR "*" --> "1" Obra : localiza
-    Visitante "1" --> "*" Roteiro : gera
-    Visitante "1" --> "*" ProgressoCaca : tem
-    ProgressoCaca "*" --> "1" CacaAoTesouro : de
+    Sala "1" --> "*" Obra : contém
+    Roteiro "1" --> "1..*" Obra : inclui
+    PistaQR "*" --> "1" Obra : identifica
+    Visitante "1" --> "*" ProgressoCaca : possui
     ProgressoCaca "1" --> "0..1" Premio : desbloqueia
-    RespostaAssistente "*" ..> "*" Obra : cita
+    RespostaAssistente "*" ..> "*" Obra : referencia
 ```
 
-## 3. Arquitetura em camadas e regra de dependências
+A ficha completa de **US-03** depende de dados curados (autor, ano, material, texto, áudio e fotografias), alguns ainda não representados no modelo de exemplo. O assistente de **US-06** é ainda uma proposta.
 
-Três camadas; as dependências vão **apenas de cima para baixo**, e a camada de serviço depende de **interfaces** (inversão de dependências), o que permite testes unitários com *mocks* (ver ADR-0002).
+## 3. Arquitetura em camadas
 
 ```mermaid
 flowchart TB
-    subgraph APR["Camada de Apresentação (PWA)"]
-        UI["Ecrãs: Roteiro, Caça ao Tesouro, Assistente, Gestor"]
-        SW["Service Worker (cache da app)"]
+    subgraph PRE["Apresentação — PWA planeada"]
+        UI["Ecrãs: Roteiros, Ficha de Obra, QR, Recompensa, Assistente"]
+        SW["Service Worker — por implementar"]
     end
-    subgraph SRV["Camada de Serviço / Lógica de Negócio"]
-        RS["RoteiroService"]
-        CS["CacaTesouroService"]
-        AS["AssistenteService"]
-        SS["SincronizacaoService"]
-        GS["GestaoSalasService"]
+    subgraph SER["Serviço / negócio"]
+        RS["RoteiroService — existente"]
+        CS["CacaTesouroService — existente"]
+        SS["SincronizacaoService — existente"]
+        AS["AssistenteService — previsto"]
     end
-    subgraph DAD["Camada de Acesso a Dados"]
-        OR["ObraRepository (interface)"]
-        PR["ProgressoRepository (interface)"]
-        LC["Implementação local: IndexedDB"]
-        RA["Implementação remota: cliente da API REST"]
+    subgraph DAD["Acesso a dados"]
+        MEM["Repositórios em memória — existentes"]
+        IDX["IndexedDB — previsto"]
+        REM["Cliente API REST — previsto"]
     end
-    API[("API REST do servidor + base de dados")]
-    LLM[("Serviço de IA externo")]
-
+    API["API REST / base de dados — previstas"]
+    LLM["Serviço IA — previsto"]
     UI --> RS
     UI --> CS
     UI --> AS
-    UI --> GS
-    RS --> OR
-    CS --> OR
-    CS --> PR
-    SS --> PR
-    SS --> OR
-    GS --> OR
-    AS --> OR
-    OR --> LC
-    OR --> RA
-    PR --> LC
-    PR --> RA
-    RA --> API
-    API --> LLM
+    RS --> MEM
+    CS --> MEM
+    SS --> MEM
+    MEM -.-> IDX
+    MEM -.-> REM
+    REM -.-> API
+    AS -.-> LLM
+    SW -.-> IDX
 ```
 
-### Classes de serviço e repositórios (desenho)
+A separação de camadas e as escolhas previstas são justificadas nos ADRs. A execução atual permite `npm run demo`, sem interface gráfica. A presença de um esquema no diagrama **não comprova a implementação** dos seus componentes.
 
-```mermaid
-classDiagram
-    class ObraRepository {
-        <<interface>>
-        +listarObrasDisponiveis() List~Obra~
-        +obterPorId(id) Obra
-        +obterPistaPorCodigo(codigo) PistaQR
-        +guardarSnapshot(obras)
-    }
-    class ProgressoRepository {
-        <<interface>>
-        +obter(idAnonimo) ProgressoCaca
-        +guardar(progresso)
-        +listarPorSincronizar() List~ProgressoCaca~
-    }
-    class RoteiroService {
-        -ObraRepository obras
-        +gerarRoteiro(minutos) Roteiro
-    }
-    class CacaTesouroService {
-        -ObraRepository obras
-        -ProgressoRepository progresso
-        +lerQR(codigo) ProgressoCaca
-    }
-    class AssistenteService {
-        -ObraRepository obras
-        -AssistenteGateway gateway
-        +perguntar(texto) RespostaAssistente
-    }
-    class AssistenteGateway {
-        <<interface>>
-        +pedirResposta(texto, contexto) String
-    }
-    class SincronizacaoService {
-        -ProgressoRepository progresso
-        +sincronizar() int
-    }
-    class ObraLocalRepository
-    class ObraRemoteRepository
-    class ProgressoLocalRepository
+### Serviços e repositórios (estado resumido)
 
-    ObraRepository <|.. ObraLocalRepository
-    ObraRepository <|.. ObraRemoteRepository
-    ProgressoRepository <|.. ProgressoLocalRepository
-    RoteiroService --> ObraRepository
-    CacaTesouroService --> ObraRepository
-    CacaTesouroService --> ProgressoRepository
-    AssistenteService --> ObraRepository
-    AssistenteService --> AssistenteGateway
-    SincronizacaoService --> ProgressoRepository
-```
+| Componente | Estado em `master` | Papel |
+| --- | --- | --- |
+| `RoteiroService` | Implementado | Lógica de seleção por tempo e exclusão de obras indisponíveis (US-01) |
+| `CacaTesouroService` e `ProgressoCaca` | Implementados | Regras de pistas e prémio (US-04/US-05) |
+| `SincronizacaoService` | Implementado | Lógica de sincronização, testada em memória (apoio a US-02) |
+| `ObraRepositoryMemoria` / `ProgressoRepositoryMemoria` | Implementados | Dados locais voláteis |
+| `AssistenteService` / gateway IA | Planeados | Perguntas fundamentadas no acervo (US-06) |
+| `IndexedDB`, `Service Worker` e API REST | Planeados | Persistência offline e serviços remotos |
 
-## 4. Diagramas de sequência
+## 4. Diagramas de sequência — fluxos previstos
 
-### 4.1 Gerar roteiro de 30 minutos (US01, US04) — com e sem rede
+### 4.1 Roteiro e consulta offline (US-01 / US-02)
 
 ```mermaid
 sequenceDiagram
     actor V as Visitante
-    participant UI as UI
+    participant UI as Interface (prevista)
     participant RS as RoteiroService
-    participant OR as ObraRepository
-    participant RA as API REST
-    participant LC as Cache local
-
-    V->>UI: Seleciona "Roteiro 30 minutos"
+    participant OR as Repositório de obras
+    participant LC as Cache persistente (prevista)
+    V->>UI: Escolhe 30 min
     UI->>RS: gerarRoteiro(30)
-    RS->>OR: listarObrasDisponiveis()
-    alt Existe rede
-        OR->>RA: GET /api/v1/obras?disponiveis=true
-        RA-->>OR: lista atualizada
-        OR->>LC: guardarSnapshot(lista)
-    else Sem rede (piso -1)
-        OR->>LC: ler snapshot
-        LC-->>OR: lista em cache
+    RS->>OR: listar obras disponíveis
+    OR-->>RS: Obras válidas
+    RS-->>UI: Roteiro de 5–7 obras (até 30 min)
+    UI-->>V: Apresenta roteiro
+    opt Roteiro guardado previamente
+        UI->>LC: Guardar roteiro
+        Note over V,LC: Mais tarde, sem ligação à rede (US-02)
+        V->>UI: Consultar roteiro
+        UI->>LC: Ler roteiro guardado
+        LC-->>UI: Conteúdo local
+        UI-->>V: Roteiro + indicação Modo Offline
     end
-    OR-->>RS: obras disponiveis
-    RS->>RS: selecionar 5 a 7 obras que cabem em 30 min
-    alt Tempo inferior a 30 min
-        RS-->>UI: sugestao de ajustar para o minimo
-    else Tempo valido
-        RS-->>UI: Roteiro
-    end
-    UI-->>V: Mostra roteiro
 ```
 
-### 4.2 Ler QR Code offline e sincronizar depois (US02, US04)
+O primeiro fluxo tem lógica no `RoteiroService`; a interface e a cache persistente pertencem ao desenvolvimento futuro.
+
+### 4.2 QR e recompensa (US-04 / US-05)
 
 ```mermaid
 sequenceDiagram
-    actor V as Visitante
-    participant UI as UI
+    actor C as Criança
+    participant UI as Leitor QR (previsto)
     participant CS as CacaTesouroService
-    participant OR as ObraRepository
-    participant PR as ProgressoRepository
-    participant SS as SincronizacaoService
-    participant RA as API REST
-
-    V->>UI: Le QR Code
+    participant OR as Repositório de obras
+    participant PR as Repositório de progresso
+    C->>UI: Lê QR Code
     UI->>CS: lerQR(codigo)
-    CS->>OR: obterPistaPorCodigo(codigo)
-    OR-->>CS: PistaQR
-    alt Codigo invalido
-        CS-->>UI: erro "QR nao reconhecido"
-    else Codigo valido
-        CS->>PR: guardar(progresso atualizado, sincronizado=false)
-        CS-->>UI: pista registada localmente
-        UI-->>V: Feedback imediato (menos de 1 s)
-    end
-    Note over SS,RA: Mais tarde, quando a rede regressa
-    SS->>PR: listarPorSincronizar()
-    SS->>RA: POST /api/v1/progressos (id anonimo)
-    RA-->>SS: 200 OK
-    SS->>PR: marcar como sincronizado
-```
-
-### 4.3 Perguntar ao assistente de IA com validação (US03)
-
-```mermaid
-sequenceDiagram
-    actor V as Visitante
-    participant UI as UI
-    participant AS as AssistenteService
-    participant OR as ObraRepository
-    participant GW as AssistenteGateway
-    participant LLM as Servico de IA
-
-    V->>UI: Pergunta sobre uma obra
-    UI->>AS: perguntar(texto)
-    alt Sem rede
-        AS-->>UI: "Assistente indisponivel offline" + ficha da obra em cache
-    else Com rede
-        AS->>OR: obter contexto curado da obra
-        OR-->>AS: ficha da obra e estado da sala
-        AS->>GW: pedirResposta(texto, contexto)
-        GW->>LLM: pedido com contexto
-        LLM-->>GW: texto gerado
-        GW-->>AS: texto
-        alt Resposta cita sala fechada ou obra desconhecida
-            AS-->>UI: resposta rejeitada, mostra ficha curada
-        else Resposta valida
-            AS-->>UI: RespostaAssistente (geradaPorIA=true)
+    CS->>OR: obter pista por código
+    alt QR não reconhecido
+        OR-->>CS: Não encontrado
+        CS-->>UI: Erro, progresso inalterado
+    else QR válido
+        OR-->>CS: Pista válida
+        CS->>PR: Guardar progresso
+        alt Todas as pistas concluídas
+            CS-->>UI: Recompensa virtual desbloqueada
+        else Faltam pistas
+            CS-->>UI: Progresso atualizado
         end
     end
-    UI-->>V: Mostra resposta com aviso "gerada por IA"
+    UI-->>C: Mostra resultado
 ```
 
-## 5. Estrutura de diretórios proposta
+A validação e o progresso existem na lógica de negócio; a leitura de QR pela câmara e o ecrã de recompensa ainda não existem.
+
+### 4.3 Assistente IA com contexto curado (US-06 — previsto)
+
+```mermaid
+sequenceDiagram
+    actor V as Visitante
+    participant UI as Interface (prevista)
+    participant AS as AssistenteService (previsto)
+    participant AC as Documentação curada
+    participant IA as Serviço IA (previsto)
+    V->>UI: Pergunta sobre uma obra
+    UI->>AS: perguntar(texto)
+    AS->>AC: Obter informação do acervo
+    alt Pergunta fora do domínio
+        AS-->>UI: Recusa educada e sugestões sobre obras
+    else Pergunta sobre obra
+        AC-->>AS: Conteúdo verificado
+        AS->>IA: Pedido limitado ao contexto
+        IA-->>AS: Resposta candidata
+        AS-->>UI: Resposta fundamentada ou aviso de insuficiência
+    end
+    UI-->>V: Mostra resposta
+```
+
+Não existe implementação nem teste do assistente IA no núcleo atual. O requisito exige respostas baseadas em documentos do acervo; não se assume que a simples chamada a um LLM garanta essa condição.
+
+## 5. Estrutura existente e componentes futuros
 
 ```text
 Projeto-de-ESOF/
 ├── README.md
 ├── docs/
-│   ├── AI_LOG.md
-│   ├── EQUIPA.md
 │   ├── requisitos.md
-│   ├── arquitetura.md
 │   ├── rastreabilidade.md
+│   ├── arquitetura.md
+│   ├── m3-incremento.md
+│   ├── m4-ci-qualidade.md
+│   ├── AI_LOG.md
 │   └── adr/
-│       ├── 0001-pwa-offline-first.md
-│       └── 0002-arquitetura-em-camadas-e-api-rest.md
+├── data/catalogo-exemplo.json
 ├── src/
-│   ├── apresentacao/   (UI + service worker)
-│   ├── servico/        (RoteiroService, CacaTesouroService, ...)
-│   ├── dados/          (repositórios locais e remotos)
-│   └── dominio/        (Obra, Sala, Roteiro, ...)
-├── tests/              (unitários, integração, sistema)
-└── .env.example
+│   ├── dominio/       (existente)
+│   ├── dados/         (repositórios em memória existentes)
+│   ├── servico/       (serviços existentes)
+│   └── infra/         (Logger existente)
+├── tests/              (testes de unidade e integração)
+├── scripts/            (análise estática)
+└── .github/workflows/  (CI)
 ```
+
+**Por desenvolver:** interface PWA, IndexedDB, Service Worker, integração REST e assistente IA. **Por validar:** critérios de aceitação de ponta a ponta, conteúdo real do MNSR e requisitos de desempenho/privacidade da aplicação final.
