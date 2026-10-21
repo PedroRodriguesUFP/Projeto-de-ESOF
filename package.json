@@ -1,11 +1,15 @@
+
 {
   "name": "mnsr-digital",
   "version": "0.3.0",
   "description": "App MNSR Digital - núcleo de domínio e serviços (M3)",
   "type": "module",
   "private": true,
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
+    "start": "node server.js",
     "lint": "node scripts/static-analysis.js",
     "test": "node --test",
     "test:ci": "node --test --experimental-test-coverage",
