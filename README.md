@@ -1,6 +1,6 @@
 # App MNSR Digital
 
-**Equipa 01:** Pedro Rodrigues, Diogo Borges, Diogo Vicente, Tiago Vaz.
+**Equipa 01:** Pedro Rodrigues, Diogo Borges, Diogo Vicente.
 
 ## Problema
 O Museu Nacional Soares dos Reis pretende proporcionar experiências de visita mais dinâmicas, sobretudo a jovens, famílias e turistas com pouco tempo. Os valores de público anteriormente referidos neste README devem ser confirmados com uma fonte antes de serem usados como estatísticas oficiais.
