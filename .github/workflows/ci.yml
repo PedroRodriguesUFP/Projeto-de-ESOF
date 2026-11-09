@@ -22,6 +22,9 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
+      - name: Auditoria de Segurança de Dependências (M5)
+        run: npm audit --audit-level=high || true
+
       - name: Configurar Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
