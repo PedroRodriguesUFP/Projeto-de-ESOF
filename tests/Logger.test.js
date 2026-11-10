@@ -52,3 +52,11 @@ test('M4 (RGPD / RNF03): o Logger mascara o UUID completo e oculta campos pessoa
   assert.equal(ctx.nome, '[REDACTED_RGPD]');
   assert.equal(ctx.token, '[REDACTED_RGPD]');
 });
+
+
+// Adicionar em tests/Logger.test.js
+test('Logger.medirTempo deve executar a função e registar a duração em ms', () => {
+  const logger = new Logger();
+  const resultado = logger.medirTempo('calculo_roteiro_teste', () => 2 + 2);
+  assert.strictEqual(resultado, 4);
+});

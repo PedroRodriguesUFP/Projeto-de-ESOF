@@ -91,9 +91,26 @@ export class Logger {
       throw erro;
     }
   }
+
+// Adicionar dentro da classe Logger em src/infra/Logger.js
+medirTempo(operacao, fn) {
+  const inicio = performance.now();
+  try {
+    const resultado = fn();
+    const duracaoMs = Number((performance.now() - inicio).toFixed(3));
+    this.info(`Profiling concluído: ${operacao}`, { operacao, duracaoMs, sucesso: true });
+    return resultado;
+  } catch (erro) {
+    const duracaoMs = Number((performance.now() - inicio).toFixed(3));
+    this.error(`Profiling falhou: ${operacao}`, { operacao, duracaoMs, erro: erro.message });
+    throw erro;
+  }
+}
+
 }
 
 export const loggerPadrao = new Logger({
   componente: 'MNSR-Core',
   nivelMinimo: process.env.LOG_LEVEL ? (NivelLog[process.env.LOG_LEVEL] ?? NivelLog.INFO) : NivelLog.SILENT,
 });
+
