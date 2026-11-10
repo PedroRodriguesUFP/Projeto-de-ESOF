@@ -1,4 +1,4 @@
-// M4 (OA7): Logging estruturado, observabilidade básica e proteção de privacidade (RNF03).
+// M4 & M5 (OA7): Logging estruturado, observabilidade básica, profiling e proteção de privacidade (RNF03).
 
 export const NivelLog = Object.freeze({
   DEBUG: 10,
@@ -71,7 +71,7 @@ export class Logger {
   }
 
   /**
-   * Mede o tempo de execução de uma operação assíncrona (profiling/diagnóstico RNF01).
+   * Mede o tempo de execução de uma operação assíncrona ou síncrona (profiling/diagnóstico RNF01).
    */
   async medirTempo(evento, fn, contextoBase = {}) {
     const inicio = performance.now();
@@ -92,25 +92,29 @@ export class Logger {
     }
   }
 
-// Adicionar dentro da classe Logger em src/infra/Logger.js
-medirTempo(operacao, fn) {
-  const inicio = performance.now();
-  try {
-    const resultado = fn();
-    const duracaoMs = Number((performance.now() - inicio).toFixed(3));
-    this.info(`Profiling concluído: ${operacao}`, { operacao, duracaoMs, sucesso: true });
-    return resultado;
-  } catch (erro) {
-    const duracaoMs = Number((performance.now() - inicio).toFixed(3));
-    this.error(`Profiling falhou: ${operacao}`, { operacao, duracaoMs, erro: erro.message });
-    throw erro;
+  /**
+   * Mede o tempo de execução de uma operação síncrona (profiling elementar M5 - OA7).
+   */
+  medirTempoSync(operacao, fn, contextoBase = {}) {
+    const inicio = performance.now();
+    try {
+      const resultado = fn();
+      const duracaoMs = Number((performance.now() - inicio).toFixed(3));
+      this.info(`Profiling concluído: ${operacao}`, { ...contextoBase, operacao, duracaoMs, sucesso: true });
+      return resultado;
+    } catch (erro) {
+      const duracaoMs = Number((performance.now() - inicio).toFixed(3));
+      this.error(`Profiling falhou: ${operacao}`, { ...contextoBase, operacao, duracaoMs, erro: erro.message });
+      throw erro;
+    }
   }
 }
 
-}
+// Compatível com Node.js e Browser (onde `process` não está definido)
+const envLogLevel =
+  typeof process !== 'undefined' && process.env ? process.env.LOG_LEVEL : undefined;
 
 export const loggerPadrao = new Logger({
   componente: 'MNSR-Core',
-  nivelMinimo: process.env.LOG_LEVEL ? (NivelLog[process.env.LOG_LEVEL] ?? NivelLog.INFO) : NivelLog.SILENT,
+  nivelMinimo: envLogLevel ? (NivelLog[envLogLevel] ?? NivelLog.INFO) : NivelLog.SILENT,
 });
-
