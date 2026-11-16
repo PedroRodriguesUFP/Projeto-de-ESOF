@@ -4,7 +4,7 @@ import { CacaTesouroService } from '../src/servico/CacaTesouroService.js';
 import { ProgressoRepositoryMemoria } from '../src/dados/ProgressoRepositoryMemoria.js';
 import { QRInvalidoError } from '../src/dominio/erros.js';
 import { gerarIdAnonimo } from '../src/dominio/Visitante.js';
-import { criarObraRepo } from './helpers.js';
+import { criarObraRepo, carregarCatalogo } from './helpers.js';
 
 function criarServico() {
   const progressoRepository = new ProgressoRepositoryMemoria();
@@ -18,7 +18,7 @@ test('US02: QR válido regista a pista e devolve o enigma', async () => {
   const r = await servico.lerQR(id, 'QR-001');
   assert.equal(r.novaPista, true);
   assert.equal(r.progresso.pistasConcluidas, 1);
-  assert.equal(r.enigma, 'Enigma de exemplo 1');
+  assert.equal(r.enigma, carregarCatalogo().pistas.find((p) => p.codigo === 'QR-001').enigma);
   assert.equal(r.completo, false);
   assert.equal(r.premio, null);
 });

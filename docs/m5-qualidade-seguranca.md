@@ -44,7 +44,7 @@ Para além do logging estruturado introduzido no M4 (`src/infra/Logger.js`), foi
 
 Para garantir builds reprodutíveis e mitigar riscos na cadeia de fornecimento de software (*software supply chain security*):
 
-1. **Minimização de Dependências Externas:** O projeto privilegia o uso de módulos nativos do Node.js (como o runner de testes nativo e servidor HTTP/Express mínimo), reduzindo drasticamente a superfície de ataque de pacotes de terceiros.
+1. **Minimização de Dependências Externas:** O projeto privilegia o uso de módulos nativos do Node.js (como o runner de testes nativo e o módulo `node:http` no servidor de desenvolvimento, sem Express), reduzindo drasticamente a superfície de ataque de pacotes de terceiros.
 2. **Controlo de Versões Exatas (Lockfile):** Utilização do `package-lock.json` para fixar a árvore de dependências e garantir que o ambiente de CI (`.github/workflows/ci.yml`) instala exatamente as mesmas versões testadas localmente.
 3. **Auditoria de Vulnerabilidades (`npm audit`):**
    * Comando executado: `npm audit --audit-level=moderate`

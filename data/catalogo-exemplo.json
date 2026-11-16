@@ -1,131 +1,29 @@
 {
-  "_aviso": "Catálogo de demonstração com obras reais do Museu Nacional Soares dos Reis (MNSR).",
+  "_aviso": "Obras reais do acervo do Museu Nacional Soares dos Reis. A distribuição por salas/pisos, os tempos de visita, as pistas e o prémio são ilustrativos (projeto académico). Imagens em public/img/obras/ (ver CREDITOS.md).",
   "salas": [
-    { "id": "S1", "nome": "Galeria de Escultura (Soares dos Reis)", "piso": 0, "estado": "ABERTA" },
-    { "id": "S2", "nome": "Sala Aurélia de Souza e Naturalismo", "piso": 0, "estado": "ABERTA" },
-    { "id": "S3", "nome": "Galeria de Pintura do Século XIX", "piso": 1, "estado": "ABERTA" },
-    { "id": "S4", "nome": "Galeria de Artes Decorativas e Faiança", "piso": -1, "estado": "ABERTA" },
-    { "id": "S5", "nome": "Reserva Técnica de Restauro", "piso": 1, "estado": "FECHADA_RESTAURO" }
+    { "id": "S1", "nome": "Galeria Soares dos Reis (escultura)", "piso": 0, "estado": "ABERTA" },
+    { "id": "S2", "nome": "Pintura do Porto, c. 1900", "piso": 0, "estado": "ABERTA" },
+    { "id": "S3", "nome": "Henrique Pousão em Itália", "piso": 1, "estado": "ABERTA" },
+    { "id": "S4", "nome": "Galeria do piso -1 (sem rede)", "piso": -1, "estado": "ABERTA" },
+    { "id": "S5", "nome": "Sala em restauro", "piso": 1, "estado": "FECHADA_RESTAURO" }
   ],
   "obras": [
-    {
-      "id": "O01",
-      "titulo": "O Desterrado",
-      "autor": "António Soares dos Reis (1872)",
-      "descricao": "Obra-prima da escultura romântica e naturalista portuguesa, esculpida em mármore de Carrara em Roma.",
-      "minutosVisita": 4,
-      "salaId": "S1",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Desterrado.jpg?width=600"
-    },
-    {
-      "id": "O02",
-      "titulo": "Busto da Viscondessa de São João da Pesqueira",
-      "autor": "António Soares dos Reis (1886)",
-      "descricao": "Retrato escultórico de notável delicadeza e rigor naturalista da galeria dedicada ao patrono do museu.",
-      "minutosVisita": 5,
-      "salaId": "S1",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Soares_dos_Reis.jpg?width=600"
-    },
-    {
-      "id": "O03",
-      "titulo": "Auto-retrato",
-      "autor": "Aurélia de Souza (1900)",
-      "descricao": "Ícone da pintura portuguesa moderna, célebre pelo sobretudo vermelho e pelo olhar frontal e determinado da pintora portuense.",
-      "minutosVisita": 6,
-      "salaId": "S2",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Autorretrato_de_Aur%C3%A9lia_de_Sousa,_c._1900.png?width=600"
-    },
-    {
-      "id": "O04",
-      "titulo": "Cena Familiar (Dia de S. Martinho)",
-      "autor": "Aurélia de Souza (c. 1900)",
-      "descricao": "Cena de interior luminosa e intimista que retrata o quotidiano familiar no Porto da viragem do século.",
-      "minutosVisita": 4,
-      "salaId": "S2",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Aur%C3%A9lia_de_Sousa_-_Cena_familiar.jpg?width=600"
-    },
-    {
-      "id": "O05",
-      "titulo": "Cecília",
-      "autor": "Henrique Pousão (1882)",
-      "descricao": "Retrato pintado em Roma com notável sensibilidade à luz e às texturas, uma das joias do legado Pousão no MNSR.",
-      "minutosVisita": 5,
-      "salaId": "S3",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Henrique_Pous%C3%A3o_-_Cec%C3%ADlia_(1882).jpg?width=600"
-    },
-    {
-      "id": "O06",
-      "titulo": "Esperando o Sucesso",
-      "autor": "Henrique Pousão (1882)",
-      "descricao": "Pintura a óleo sobre tela que combina rigor compositivo e atmosfera melancólica.",
-      "minutosVisita": 6,
-      "salaId": "S3",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Esperando_o_sucesso_-_Henrique_Pous%C3%A3o.png?width=600"
-    },
-    {
-      "id": "O07",
-      "titulo": "A Ceifa (Luminismo)",
-      "autor": "António Silva Porto (c. 1884)",
-      "descricao": "Obra representativa da introdução da pintura de ar livre (plein air) e do naturalismo em Portugal.",
-      "minutosVisita": 5,
-      "salaId": "S4",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Silva_Porto_-_A_ceifa.jpg?width=600"
-    },
-    {
-      "id": "O08",
-      "titulo": "Céfalo e Prócris",
-      "autor": "João Marques de Oliveira (1879)",
-      "descricao": "Composição mitológica de grande impacto dramático que introduziu novos valores de luz na Academia Portuense.",
-      "minutosVisita": 4,
-      "salaId": "S4",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/C%C3%A9falo_e_Pr%C3%B3cris_(1879)_-_João_Marques_de_Oliveira.png?width=600"
-    },
-    {
-      "id": "O09",
-      "titulo": "Biombo Namban (Período Edo)",
-      "autor": "Escola Kano (Séc. XVII)",
-      "descricao": "Par de biombos japoneses em papel, folha de ouro e pigmentos que documenta a chegada dos navios portugueses a Nagasáqui.",
-      "minutosVisita": 6,
-      "salaId": "S4",
-      "imagemUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Nanban_byobu_Soares_dos_Reis.jpg?width=600"
-    },
-    {
-      "id": "O10",
-      "titulo": "Retrato de Ramalho Ortigão (Em Restauro)",
-      "autor": "Columbano Bordalo Pinheiro",
-      "descricao": "Obra temporariamente indisponível para conservação preventiva na reserva técnica.",
-      "minutosVisita": 2,
-      "salaId": "S5",
-      "imagemUrl": null
-    },
-    {
-      "id": "O11",
-      "titulo": "Vaso Monumental de Faiança de Miragaia (Em Restauro)",
-      "autor": "Real Fábrica do Cavaquinho",
-      "descricao": "Peça cerâmica histórica em intervenção de restauro.",
-      "minutosVisita": 2,
-      "salaId": "S5",
-      "imagemUrl": null
-    }
+    { "id": "O01", "titulo": "O Desterrado", "autor": "António Soares dos Reis", "ano": "1872", "tecnica": "Mármore de Carrara", "descricao": "Um jovem nu, sentado num rochedo, olha o vazio com saudade da terra natal. Foi a prova final do escultor como bolseiro em Roma e é a peça mais emblemática do museu.", "minutosVisita": 4, "salaId": "S1", "imagem": "public/img/obras/O01.jpg" },
+    { "id": "O02", "titulo": "Conde de Ferreira", "autor": "António Soares dos Reis", "ano": "1876", "tecnica": "Gesso original", "descricao": "Modelo em gesso da estátua do Conde de Ferreira, benemérito portuense. É um dos Tesouros Nacionais do museu.", "minutosVisita": 5, "salaId": "S1", "imagem": "public/img/obras/O02.jpg" },
+    { "id": "O03", "titulo": "Autorretrato", "autor": "Aurélia de Souza", "ano": "c. 1900", "tecnica": "Óleo sobre tela", "descricao": "A pintora retrata-se de casaco vermelho, de frente e com um olhar intenso. É um dos autorretratos mais conhecidos da pintura portuguesa.", "minutosVisita": 6, "salaId": "S2", "imagem": "public/img/obras/O03.jpg" },
+    { "id": "O04", "titulo": "Casas Brancas de Capri", "autor": "Henrique Pousão", "ano": "1882", "tecnica": "Óleo sobre tela", "descricao": "Pintada em Itália quando o artista tinha 23 anos. A luz do Mediterrâneo transforma as casas em formas geométricas quase abstratas.", "minutosVisita": 4, "salaId": "S2", "imagem": "public/img/obras/O04.jpg" },
+    { "id": "O05", "titulo": "Esperando o Sucesso", "autor": "Henrique Pousão", "ano": "1882", "tecnica": "Óleo sobre tela", "descricao": "Um rapaz de rua de Roma espera, encostado à parede, junto a um desenho feito a giz. Uma das obras mais alegres do período italiano.", "minutosVisita": 5, "salaId": "S3", "imagem": "public/img/obras/O05.jpg" },
+    { "id": "O06", "titulo": "Cecília", "autor": "Henrique Pousão", "ano": "1882", "tecnica": "Óleo sobre tela", "descricao": "Uma jovem romana reza junto a um pilar de igreja. Pousão enviou esta pintura ao Salon de Paris de 1882.", "minutosVisita": 6, "salaId": "S3", "imagem": "public/img/obras/O06.jpg" },
+    { "id": "O07", "titulo": "Céfalo e Prócris", "autor": "João Marques de Oliveira", "ano": "1879", "tecnica": "Óleo sobre tela", "descricao": "Cena da mitologia grega: o caçador Céfalo segura Prócris, ferida por engano. Foi a prova final do pintor como bolseiro em Paris.", "minutosVisita": 5, "salaId": "S4", "imagem": "public/img/obras/O07.jpg" },
+    { "id": "O08", "titulo": "Retrato do Escultor Soares dos Reis", "autor": "João Marques de Oliveira", "ano": "c. 1881", "tecnica": "Óleo sobre tela", "descricao": "Retrato do amigo e colega escultor, de barba negra sobre fundo castanho. Os dois eram amigos desde a Academia Portuense de Belas-Artes.", "minutosVisita": 4, "salaId": "S4", "imagem": "public/img/obras/O08.jpg" },
+    { "id": "O09", "titulo": "Senhora Vestida de Preto", "autor": "Henrique Pousão", "ano": "1882", "tecnica": "Óleo sobre madeira", "descricao": "Pequeno retrato pintado em Roma, com pinceladas rápidas e muito modernas para a época. É um Tesouro Nacional.", "minutosVisita": 6, "salaId": "S4", "imagem": "public/img/obras/O09.jpg" },
+    { "id": "O10", "titulo": "Janela das Persianas Azuis", "autor": "Henrique Pousão", "ano": "1882–1883", "tecnica": "Óleo sobre madeira", "descricao": "Uma parede branca, uma janela e persianas azuis: a pintura vale pelas cores e formas. Tesouro Nacional (sala temporariamente fechada nesta demonstração).", "minutosVisita": 2, "salaId": "S5", "imagem": "public/img/obras/O10.jpg" },
+    { "id": "O11", "titulo": "Colheita – Ceifeiras", "autor": "Silva Porto", "ano": "1893", "tecnica": "Óleo sobre tela", "descricao": "Mulheres a ceifar o trigo, numa das últimas grandes obras do pintor naturalista. Sala temporariamente fechada nesta demonstração.", "minutosVisita": 2, "salaId": "S5", "imagem": "public/img/obras/O11.jpg" }
   ],
   "pistas": [
-    {
-      "codigo": "QR-001",
-      "enigma": "Enigma de exemplo 1",
-      "obraId": "O01"
-    },
-    {
-      "codigo": "QR-002",
-      "enigma": "Na Sala S2, a grande pintora do Porto Aurélia de Souza retratou o calor e a luz da sua própria família.",
-      "obraId": "O04"
-    },
-    {
-      "codigo": "QR-003",
-      "enigma": "Desce até à Galeria S4 (Piso -1) e procura a obra naturalista pintada pelo mestre Silva Porto.",
-      "obraId": "O07"
-    }
+    { "codigo": "QR-001", "enigma": "Pista 1: procura o jovem de mármore sentado num rochedo, longe da sua terra.", "obraId": "O01" },
+    { "codigo": "QR-002", "enigma": "Pista 2: encontra as casas brancas de uma ilha italiana, pintadas por um artista de 23 anos.", "obraId": "O04" },
+    { "codigo": "QR-003", "enigma": "Pista 3: desce ao piso -1 e encontra o caçador que segura a sua amada ferida.", "obraId": "O07" }
   ],
-  "premio": {
-    "descricao": "Prémio MNSR: Vale de 15% de desconto na livraria do Museu Nacional Soares dos Reis + Postal d'O Desterrado"
-  }
+  "premio": { "descricao": "Prémio de demonstração: desconto na loja do museu" }
 }

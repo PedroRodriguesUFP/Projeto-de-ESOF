@@ -14,7 +14,8 @@
     "test": "node --test",
     "test:ci": "node --test --experimental-test-coverage",
     "demo": "LOG_LEVEL=INFO node src/demo.js",
-    "check": "npm run lint && npm test"
+    "check": "npm run lint && npm test",
+    "imagens": "node scripts/descarregar-imagens.js"
   },
   "license": "MIT"
 }
