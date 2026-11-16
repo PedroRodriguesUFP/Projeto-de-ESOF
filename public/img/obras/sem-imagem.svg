@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Imagem indisponível">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8d9ca"/><stop offset="1" stop-color="#e8dcc7"/></linearGradient></defs>
+  <rect width="400" height="300" fill="url(#g)"/>
+  <rect x="140" y="80" width="120" height="140" fill="none" stroke="#a47c45" stroke-width="8"/>
+  <circle cx="225" cy="120" r="18" fill="#e5d4ae"/>
+  <path d="M150 210 L190 160 L215 185 L235 170 L250 210 Z" fill="#a6a18b"/>
+  <text x="200" y="262" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#7d7a68">Imagem por descarregar (npm run imagens)</text>
+</svg>

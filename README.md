@@ -4,7 +4,7 @@
 
 ![CI](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/actions/workflows/ci.yml/badge.svg)
 ![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?logo=node.js&logoColor=white)
-![Testes](https://img.shields.io/badge/testes-22%20automatizados-2C7A73)
+![Testes](https://img.shields.io/badge/testes-24%20automatizados-2C7A73)
 ![Vulnerabilidades](https://img.shields.io/badge/npm%20audit-0%20vulnerabilidades-2C7A73)
 ![Licença](https://img.shields.io/badge/licença-MIT-5B6B7A)
 
@@ -60,17 +60,18 @@ Ainda **não** estão feitos: a aplicação instalável no telemóvel (PWA), o f
 | M2 | Diagramas UML, arquitetura e decisões justificadas | 4 |
 | M3 | Primeira versão funcional e 17 testes | 6 |
 | M4 | Verificação automática a cada alteração (CI) e registos de execução (20 testes) | 8 |
-| **M5** | **Revisão de qualidade, melhorias ao código, segurança e documentação (22 testes) ✅ atual** | **10** |
+| **M5** | **Revisão de qualidade, melhorias ao código, segurança e documentação (24 testes) ✅ atual** | **10** |
 | M6 | Versão final, testes finais e demonstração | 12/13 |
 
 Para confirmar o estado do projeto basta correr:
 
 ```bash
 npm run lint     # verifica regras e erros no código
-npm test         # corre os 22 testes automáticos
+npm test         # corre os 24 testes automáticos
 npm run test:ci  # testes com relatório do código coberto
 npm run demo     # mostra um exemplo na consola
 npm start        # abre a interface web em http://localhost:3000
+npm run imagens  # descarrega as fotos das obras (uma vez, com internet)
 ```
 
 ## Funcionalidades (backlog)
@@ -81,7 +82,7 @@ Cada funcionalidade corresponde a uma *issue* no GitHub:
 | --- | --- | --- | --- |
 | [US-01](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/5) | Gerar um roteiro de 30, 60 ou 90 minutos | Alta | ✅ Funciona e já se pode experimentar na interface web |
 | [US-02](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/6) | Consultar o roteiro sem rede | Alta | 🟡 Em parte · ainda não guarda os dados no telemóvel |
-| [US-03](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/7) | Ver a ficha da obra *O Desterro* | Alta | ⬜ Por fazer (o catálogo já mostra obras de exemplo) |
+| [US-03](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/7) | Ver a ficha da obra *O Desterro* | Alta | 🟡 Em parte · o catálogo já mostra obras reais com imagem, falta a ficha completa |
 | [US-04](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/8) | Ler um QR e desbloquear uma pista | Alta | ✅ Funciona · por agora o código é escrito à mão, sem câmara |
 | [US-05](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/9) | Receber um prémio ao terminar a caça | Média | ✅ Funciona · prémio fictício |
 | [US-06](https://github.com/PedroRodriguesUFP/Projeto-de-ESOF/issues/10) | Fazer perguntas ao assistente de IA | Média | ⬜ Por fazer |
@@ -158,7 +159,8 @@ Projeto-de-ESOF/
 │   ├── dados/        # Onde os dados ficam guardados (por agora, em memória)
 │   └── infra/        # Registo do que acontece na aplicação (logs)
 ├── public/           # Interface web de demonstração
-├── data/             # Catálogo de obras de exemplo
+│   └── img/obras/    # Fotos das obras, guardadas para funcionar sem rede
+├── data/             # Catálogo de obras reais do museu
 ├── tests/            # Testes automáticos
 ├── scripts/          # Verificação automática do código
 ├── docs/             # Requisitos, arquitetura, decisões, marcos e registo de IA
